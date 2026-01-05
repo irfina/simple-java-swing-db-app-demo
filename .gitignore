@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Ant folders
+build/
+target/
+
 # Log file
 *.log
 
