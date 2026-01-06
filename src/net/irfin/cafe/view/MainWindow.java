@@ -9,7 +9,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.Window;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -50,6 +55,14 @@ public class MainWindow extends javax.swing.JFrame {
         tglbtnMealCtgr = new javax.swing.JToggleButton();
         tglbtnBeverageCtgr = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        menuItemNimbus = new javax.swing.JMenuItem();
+        menuItemMetal = new javax.swing.JMenuItem();
+        menuItemDefault = new javax.swing.JMenuItem();
+        menuItemCde = new javax.swing.JMenuItem();
+        menuItemWindowsClassic = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple Cafe Demo");
@@ -87,10 +100,40 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(tglbtnMealCtgr)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tglbtnBeverageCtgr)
-                .addContainerGap(303, Short.MAX_VALUE))
+                .addContainerGap(279, Short.MAX_VALUE))
         );
 
         getContentPane().add(panelSidebar, java.awt.BorderLayout.LINE_START);
+
+        jMenu1.setText("Options");
+
+        jMenu2.setText("Appearance");
+
+        menuItemNimbus.setText("Nimbus");
+        menuItemNimbus.addActionListener(this::menuItemNimbusActionPerformed);
+        jMenu2.add(menuItemNimbus);
+
+        menuItemMetal.setText("Metal");
+        menuItemMetal.addActionListener(this::menuItemMetalActionPerformed);
+        jMenu2.add(menuItemMetal);
+
+        menuItemDefault.setText("Default");
+        menuItemDefault.addActionListener(this::menuItemDefaultActionPerformed);
+        jMenu2.add(menuItemDefault);
+
+        menuItemCde.setText("CDE/Motif");
+        menuItemCde.addActionListener(this::menuItemCdeActionPerformed);
+        jMenu2.add(menuItemCde);
+
+        menuItemWindowsClassic.setText("Windows Classic");
+        menuItemWindowsClassic.addActionListener(this::menuItemWindowsClassicActionPerformed);
+        jMenu2.add(menuItemWindowsClassic);
+
+        jMenu1.add(jMenu2);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -109,6 +152,27 @@ public class MainWindow extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_tglbtnMealCtgrActionPerformed
 
+    private void menuItemNimbusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNimbusActionPerformed
+        changeLookAndFeel(this, "javax.swing.plaf.nimbus.NimbusLookAndFeel");
+    }//GEN-LAST:event_menuItemNimbusActionPerformed
+
+    private void menuItemMetalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemMetalActionPerformed
+        changeLookAndFeel(this, "javax.swing.plaf.metal.MetalLookAndFeel");
+    }//GEN-LAST:event_menuItemMetalActionPerformed
+
+    private void menuItemDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemDefaultActionPerformed
+        changeLookAndFeel(this, "com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+    }//GEN-LAST:event_menuItemDefaultActionPerformed
+
+    private void menuItemCdeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCdeActionPerformed
+        changeLookAndFeel(this, "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+
+    }//GEN-LAST:event_menuItemCdeActionPerformed
+
+    private void menuItemWindowsClassicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemWindowsClassicActionPerformed
+        changeLookAndFeel(this, "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
+    }//GEN-LAST:event_menuItemWindowsClassicActionPerformed
+
     private boolean isPaneAlreadyDisplayed(JPanel panel) {
         var centerComp = getCurrentContentPane();
         
@@ -125,9 +189,42 @@ public class MainWindow extends javax.swing.JFrame {
         return layout.getLayoutComponent(BorderLayout.CENTER);
     }
     
+    /**
+     * Mengubah Look and Feel aplikasi secara dinamis.
+     * @param frame Window utama (JFrame/JDialog) yang perlu diupdate.
+     * @param lafClassName Nama class lengkap dari LAF (misal: "com.sun.java.swing.plaf.windows.WindowsLookAndFeel")
+     */
+    public static void changeLookAndFeel(Window window, String lafClassName) {
+        try {
+            // 1. Set Look and Feel baru
+            UIManager.setLookAndFeel(lafClassName);
+
+            // 2. Perbarui seluruh hierarki komponen agar tampilan berubah
+            SwingUtilities.updateComponentTreeUI(window);
+
+            // 3. Opsional: Sesuaikan kembali ukuran komponen
+            window.pack();
+        }
+        catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e)
+        {
+            JOptionPane.showMessageDialog(window,
+                    "Gagal memuat Look and Feel: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpAppMenu;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem menuItemCde;
+    private javax.swing.JMenuItem menuItemDefault;
+    private javax.swing.JMenuItem menuItemMetal;
+    private javax.swing.JMenuItem menuItemNimbus;
+    private javax.swing.JMenuItem menuItemWindowsClassic;
     private javax.swing.JPanel panelSidebar;
     private javax.swing.JToggleButton tglbtnBeverageCtgr;
     private javax.swing.JToggleButton tglbtnMealCtgr;

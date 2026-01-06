@@ -4,6 +4,8 @@
  */
 package net.irfin.cafe;
 
+import java.awt.Frame;
+import javax.swing.UIManager;
 import net.irfin.cafe.view.MainWindow;
 
 /**
@@ -11,6 +13,12 @@ import net.irfin.cafe.view.MainWindow;
  * @author Hansen
  */
 public class MainApp {
+    
+    private static Frame mainWindowInstance;
+    
+    public static Frame getMainWindow() {
+        return mainWindowInstance;
+    }
     
     /**
      * @param args the command line arguments
@@ -33,10 +41,16 @@ public class MainApp {
             ex.printStackTrace(System.out);
         }
         //</editor-fold>
+        
+        UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
+for (UIManager.LookAndFeelInfo laf : lafs) {
+    System.out.println("Name: " + laf.getName());
+    System.out.println("Class: " + laf.getClassName());
+}
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainWindow().setVisible(true));
-        
+        mainWindowInstance = new MainWindow();
+        java.awt.EventQueue.invokeLater(() -> mainWindowInstance.setVisible(true));
         
 //        java.awt.EventQueue.invokeLater(
 //            new Runnable() {

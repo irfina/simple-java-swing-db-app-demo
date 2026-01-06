@@ -6,7 +6,12 @@ package net.irfin.cafe.view;
 
 import net.irfin.cafe.util.DatabaseConnection;
 import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import net.irfin.cafe.MainApp;
+import net.irfin.cafe.entity.MealCategory;
+import net.irfin.cafe.repository.MealCategoryRepo;
 
 /**
  *
@@ -19,6 +24,7 @@ public class MealCategoryList extends javax.swing.JPanel {
      */
     public MealCategoryList() {
         initComponents();
+        inisialisasiTableModel();
     }
 
     /**
@@ -34,11 +40,12 @@ public class MealCategoryList extends javax.swing.JPanel {
         btnNew = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblMealCategory = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
         btnNew.setText("New...");
+        btnNew.addActionListener(this::btnNewActionPerformed);
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
@@ -66,60 +73,61 @@ public class MealCategoryList extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblMealCategory);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        // Baca dari database record2 MealCategory
+        List<MealCategory> listKategori;
         
-        var sql = """
-                  SELECT id, name FROM meal_category ORDER BY name;
-                  """;
-        
-        // eksekusi query
-        try (var stmt = DatabaseConnection.getConnection().createStatement()) {
-            var resultSet = stmt.executeQuery(sql);
-            
-            // iterasi hasil query
-            int id;
-            String name;
-            while (resultSet.next()) {
-                id = resultSet.getInt(1);
-                name = resultSet.getString(2);
-                System.out.println(id + " - " + name);
-            }
+        try {
+            // Baca dari database record2 MealCategory
+            MealCategoryRepo repo = new MealCategoryRepo(DatabaseConnection.getConnection());
+            listKategori = repo.getAll();
         }
         catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-            JOptionPane.showMessageDialog(this, "Error mengakses data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error saat mengakses data: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        
-        
         // tampilkan ke JTable
-        
+        var tm = (DefaultTableModel) tblMealCategory.getModel();
+        tm.setRowCount(0);      // Kosongkan dahulu baris2 data
+        for (MealCategory mc : listKategori) {
+            var barisData = new Object[] { mc.getId(), mc.getName() };
+            
+            tm.addRow(barisData);
+        }
+        tblMealCategory.setModel(tm);
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
+        CreateMealCategoryDlg dlg = new CreateMealCategoryDlg(null);
+        dlg.setLocationRelativeTo(MainApp.getMainWindow());
+        dlg.setVisible(true);
+        
+        // Panggil dlg.getReturnStatus utk mengetahui user menutup dialog ini dengan
+        // memilih OK/Save atau tidak?
+        
+        var retStatus = dlg.getReturnStatus();
+        System.out.println("retStatus = " + retStatus);
+        if (retStatus == CreateMealCategoryDlg.RET_OK)
+            btnRefreshActionPerformed(evt);
+    }//GEN-LAST:event_btnNewActionPerformed
+
+    private void inisialisasiTableModel() {
+        String[] colNames = {"ID", "Category Name"};
+        var tableModel = new DefaultTableModel(colNames, 0);  // 0 = jml baris. Sengaja di-set nol karena biarkan nanti terisi saat user klik reload.
+        
+        tblMealCategory.setModel(tableModel);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblMealCategory;
     // End of variables declaration//GEN-END:variables
 }
