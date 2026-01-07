@@ -6,7 +6,7 @@ package net.irfin.cafe;
 
 import java.awt.Frame;
 import javax.swing.UIManager;
-import net.irfin.cafe.view.MainWindow;
+import net.irfin.cafe.app.view.MainWindow;
 
 /**
  *
@@ -42,12 +42,6 @@ public class MainApp {
         }
         //</editor-fold>
         
-        UIManager.LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
-for (UIManager.LookAndFeelInfo laf : lafs) {
-    System.out.println("Name: " + laf.getName());
-    System.out.println("Class: " + laf.getClassName());
-}
-
         /* Create and display the form */
         mainWindowInstance = new MainWindow();
         java.awt.EventQueue.invokeLater(() -> mainWindowInstance.setVisible(true));

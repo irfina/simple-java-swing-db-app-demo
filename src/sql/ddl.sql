@@ -13,3 +13,13 @@ CREATE TABLE meal_category (
     PRIMARY KEY (id),
     UNIQUE (name)
 );
+
+CREATE TABLE meal (
+    id SERIAL,
+    meal_ctgr_id INTEGER NOT NULL,
+    name VARCHAR(256) NOT NULL,
+    notes VARCHAR(512),
+    PRIMARY KEY (id),
+    UNIQUE (name),
+    FOREIGN KEY (meal_ctgr_id) REFERENCES meal_category(id) ON UPDATE CASCADE
+);

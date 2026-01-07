@@ -1,4 +1,4 @@
-package net.irfin.cafe.entity;
+package net.irfin.cafe.mealcategory.entity;
 
 import java.util.List;
 

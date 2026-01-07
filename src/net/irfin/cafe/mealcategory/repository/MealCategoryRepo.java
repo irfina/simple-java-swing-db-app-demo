@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package net.irfin.cafe.repository;
+package net.irfin.cafe.mealcategory.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import net.irfin.cafe.entity.MealCategory;
+import net.irfin.cafe.mealcategory.entity.MealCategory;
 
 /**
  *
@@ -76,7 +76,15 @@ public class MealCategoryRepo {
     public void create(MealCategory mc) throws SQLException {
         var sql = "INSERT INTO meal_category (\"name\") VALUES (?)";
         
-        System.out.println("MC.getname ==> " +  mc.getName());
+        try (var ps = dbCon.prepareStatement(sql)) {
+            ps.setString(1, mc.getName());
+            
+            ps.executeUpdate();
+        }
+    }
+
+    public void update(MealCategory mc) throws SQLException {
+        var sql = "UPDATE meal_category SET \"name\" = ? WHERE id = " + mc.getId();
         
         try (var ps = dbCon.prepareStatement(sql)) {
             ps.setString(1, mc.getName());

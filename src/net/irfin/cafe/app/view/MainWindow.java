@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package net.irfin.cafe.view;
+package net.irfin.cafe.app.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import net.irfin.cafe.meal.view.MealList;
+import net.irfin.cafe.mealcategory.view.MealCategoryList;
 
 /**
  *
@@ -25,6 +27,7 @@ public class MainWindow extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainWindow.class.getName());
 
     private MealCategoryList paneMealCtgrList;
+    private MealList paneMealList;
     
     /**
      * Creates new form MainWindow
@@ -55,6 +58,7 @@ public class MainWindow extends javax.swing.JFrame {
         tglbtnMealCtgr = new javax.swing.JToggleButton();
         tglbtnBeverageCtgr = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
+        btnMealList = new javax.swing.JToggleButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -79,6 +83,10 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setFont(jLabel1.getFont().deriveFont((jLabel1.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD, jLabel1.getFont().getSize()+4));
         jLabel1.setText("App Menu");
 
+        btnGrpAppMenu.add(btnMealList);
+        btnMealList.setText("Meals");
+        btnMealList.addActionListener(this::btnMealListActionPerformed);
+
         javax.swing.GroupLayout panelSidebarLayout = new javax.swing.GroupLayout(panelSidebar);
         panelSidebar.setLayout(panelSidebarLayout);
         panelSidebarLayout.setHorizontalGroup(
@@ -86,10 +94,16 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(panelSidebarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tglbtnMealCtgr, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tglbtnBeverageCtgr, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSidebarLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(tglbtnBeverageCtgr, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSidebarLayout.createSequentialGroup()
+                        .addGroup(panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tglbtnMealCtgr, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(btnMealList, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         panelSidebarLayout.setVerticalGroup(
             panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,9 +112,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(tglbtnMealCtgr)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnMealList)
+                .addGap(40, 40, 40)
                 .addComponent(tglbtnBeverageCtgr)
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addContainerGap(222, Short.MAX_VALUE))
         );
 
         getContentPane().add(panelSidebar, java.awt.BorderLayout.LINE_START);
@@ -145,7 +161,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Create objek MealCategoryList dan tampung ke bagian tengah content.
         paneMealCtgrList = new MealCategoryList();
+        paneMealCtgrList.refreshData();
         System.out.println("New MealCategoryList created.");
+        
+        var currPanelYgTampilDiTgh = getCurrentContentPane();
+        if (currPanelYgTampilDiTgh != null)
+            remove(currPanelYgTampilDiTgh);
         
         add(paneMealCtgrList, java.awt.BorderLayout.CENTER);
         revalidate();
@@ -172,6 +193,25 @@ public class MainWindow extends javax.swing.JFrame {
     private void menuItemWindowsClassicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemWindowsClassicActionPerformed
         changeLookAndFeel(this, "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
     }//GEN-LAST:event_menuItemWindowsClassicActionPerformed
+
+    private void btnMealListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMealListActionPerformed
+        // Periksa apakah content pane saat ini sudah menampilkan UI yg dimaksud.
+        if (isPaneAlreadyDisplayed(paneMealList))
+            return;
+
+        // Create objek MealCategoryList dan tampung ke bagian tengah content.
+        paneMealList = new MealList();
+        paneMealList.refreshData();
+        System.out.println("New MealList created.");
+        
+        var currPanelYgTampilDiTgh = getCurrentContentPane();
+        if (currPanelYgTampilDiTgh != null)
+            remove(currPanelYgTampilDiTgh);
+        
+        add(paneMealList, java.awt.BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_btnMealListActionPerformed
 
     private boolean isPaneAlreadyDisplayed(JPanel panel) {
         var centerComp = getCurrentContentPane();
@@ -216,6 +256,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpAppMenu;
+    private javax.swing.JToggleButton btnMealList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
