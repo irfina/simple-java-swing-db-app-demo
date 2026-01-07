@@ -183,12 +183,11 @@ public class MealList extends javax.swing.JPanel {
             idxBarisDipilih = tblMeal.convertRowIndexToModel(idxBarisDipilih);
             
             // Ambil ID dan Nama dari data yg dipilih
-            int idMealCtgr = (int) tblMeal.getModel().getValueAt(idxBarisDipilih, COL_ID);
-            String namaMealCtgr = (String) tblMeal.getModel().getValueAt(idxBarisDipilih, COL_MEALS_NAME);
+            int idMeal = (int) tblMeal.getModel().getValueAt(idxBarisDipilih, COL_ID);
 
-//            var dlgView = new MealCategoryViewDlg(null, idMealCtgr, namaMealCtgr);
-//            dlgView.setLocationRelativeTo(MainApp.getMainWindow());
-//            dlgView.setVisible(true);
+            var dlgView = new MealViewDlg(null, idMeal);
+            dlgView.setLocationRelativeTo(MainApp.getMainWindow());
+            dlgView.setVisible(true);
         }
     }//GEN-LAST:event_tblMealMouseClicked
 
